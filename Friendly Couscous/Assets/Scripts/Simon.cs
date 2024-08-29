@@ -26,6 +26,10 @@ public class Simon : MonoBehaviour
 
     public bool turned = false;
 
+    
+
+   
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,12 +41,20 @@ public class Simon : MonoBehaviour
         GameRound.Add(mapdict[Random.Range(0, 4)]);
 
     }
-    private IEnumerator gaming(AudioSource sound, Light lightcolor)
+    private IEnumerator gaming()
     {
-        lightcolor.enabled = true;
-        sound.Play();
-        yield return new WaitForSeconds(1);  
-        lightcolor.enabled = false;
+
+        for(int i = 0; i < GameRound.Count; i++)
+        {
+            match temp = GameRound[i];
+            Debug.Log(i);
+            temp.lightcolor.enabled = true;
+            temp.sound.Play();
+            yield return new WaitForSeconds(1);
+            temp.lightcolor.enabled = false;
+            
+        }
+        
     }
 
     // Update is called once per frame
@@ -51,13 +63,12 @@ public class Simon : MonoBehaviour
         
         if (turned)
         {
-           for(int i=0;i<GameRound.Count;i++)
-            {
-                match temp = GameRound[i];
-                coroutine = gaming(temp.sound, temp.lightcolor);
-                StartCoroutine(coroutine);
-            }
+            coroutine = gaming();
+            StartCoroutine(coroutine);
+
+            
             turned = false;
+            
             GameRound.Add(mapdict[Random.Range(0, 4)]);
         }
     }
